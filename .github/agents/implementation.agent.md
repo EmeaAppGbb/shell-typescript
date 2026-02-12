@@ -142,6 +142,16 @@ After ALL features have passed their inner and middle loops, run the complete te
 
 When the full suite is green, implementation is complete.
 
+### Post-Implementation: Generate Documentation
+
+After the full suite passes, generate the living documentation site:
+
+```
+npm run docs:generate
+```
+
+This parses all Gherkin `.feature` files and matches them with screenshots captured during test runs to produce a visual user manual in `docs/`. Each feature becomes a page with step-by-step screenshots. Preview with `npm run docs:serve`.
+
 ## 6. Fast Feedback Practices
 
 Apply these practices throughout all loops to maintain speed:
