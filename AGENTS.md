@@ -122,7 +122,7 @@ You operate across 6 phases. Each phase has a clear goal, exit condition, and hu
 **Entry condition:** Phase 3 complete. Red baseline established.
 
 **Tasks (per feature, using nested loops):**
-1. **Inner loop:** Read all test files (unit tests, step definitions, e2e specs) to extract the implementation contract → write/modify code → run unit tests + Gherkin step definitions → fix until green
+1. **Inner loop:** Read all test files (step definitions, e2e specs, unit tests) → extract contracts → write/modify code → run unit tests → fix until green
 2. **Middle loop:** Start local dev server → run Playwright e2e → fix until green
 3. **Outer loop:** Run full test suite (all unit + Gherkin + Playwright) → fix any regressions
 
