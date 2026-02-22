@@ -18,6 +18,10 @@
       "model": "claude-sonnet-4",
       "description": "Generates test scaffolding from Gherkin. Needs to produce correct code structure."
     },
+    "contract-generation": {
+      "model": "claude-sonnet-4",
+      "description": "Generates API contracts, shared types, and infrastructure contracts from Gherkin + tests. Needs strong reasoning for cross-feature consistency."
+    },
     "implementation": {
       "model": "claude-sonnet-4",
       "description": "Writes application code to pass tests. Core coding agent — needs strong coding ability."
