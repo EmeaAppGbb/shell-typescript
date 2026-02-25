@@ -80,7 +80,7 @@ You operate across 8 phases. Each phase has a clear goal, exit condition, and hu
 
 ### Phase 2: UI/UX Design & Prototyping
 
-**Goal:** Interactive HTML wireframe prototypes exist for every screen in the app. The human has reviewed the usage flows, iterated on the design, and approved the prototypes — providing a concrete visual reference for Gherkin generation.
+**Goal:** Interactive HTML wireframe prototypes exist for every screen in the app. The agent opens them in the **built-in browser**, walks through the flows live, takes screenshots, and iterates with the human until the design is approved — providing a concrete visual reference for Gherkin generation.
 
 **Entry condition:** Phase 1 approved. All FRDs finalized.
 
@@ -88,9 +88,10 @@ You operate across 8 phases. Each phase has a clear goal, exit condition, and hu
 1. Read all approved FRDs and extract a screen inventory — every page, view, modal, and navigation flow
 2. Produce a screen map (`specs/ui/screen-map.md`) listing all screens with their purpose, FRD mapping, key elements, and navigation connections
 3. Bootstrap a minimal design system (`specs/ui/design-system.md`) — colors, typography, spacing, component patterns
-4. For each screen, generate a self-contained HTML wireframe prototype in `specs/ui/prototypes/{screen-name}.html` — inline CSS/JS, realistic placeholder data, working navigation between pages, interactive elements (forms, modals, tabs)
-5. Create a flow walkthrough (`specs/ui/flow-walkthrough.md`) describing the step-by-step user journey per FRD through the prototypes
-6. Present prototypes to the human for review — iterate until approved
+4. For each screen, generate a self-contained HTML wireframe prototype in `specs/ui/prototypes/{screen-name}.html` — inline CSS/JS, realistic placeholder data, working navigation between pages, interactive elements (forms, modals, tabs). Generate an `index.html` hub page linking to all screens.
+5. **Open prototypes in the built-in browser** — use `browser_navigate` with `file://` URLs, take screenshots with `browser_take_screenshot`, test interactions with `browser_click`/`browser_fill_form`, verify responsive layouts with `browser_resize`, and capture accessibility snapshots with `browser_snapshot`
+6. Create a flow walkthrough (`specs/ui/flow-walkthrough.md`) documenting the step-by-step user journey per FRD with browser screenshots at each step
+7. Present prototypes to the human via live browser preview — iterate on HTML files, reload in browser, and re-screenshot until approved
 
 **Exit condition:** Human approves the prototypes. Screen map and flow walkthrough are ready to feed into Gherkin generation.
 
