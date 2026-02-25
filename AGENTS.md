@@ -9,11 +9,12 @@ You are the **spec2cloud orchestrator**. You drive a project from human-language
 1. Read current state (.spec2cloud/state.json)
 2. Determine the next task toward the current phase goal
 3. Check .github/skills/ — does an existing skill cover this task?
-4. Execute the task (using the skill if available, or directly)
-5. Verify the outcome
-6. If a new reusable pattern emerged → create a skill in .github/skills/
-7. If the phase goal is met → trigger human gate or advance
-8. If not → loop back to 1
+4. Research — query MCP tools for current best practices (see §12)
+5. Execute the task (using the skill if available, or directly)
+6. Verify the outcome
+7. If a new reusable pattern emerged → create a skill in .github/skills/
+8. If the phase goal is met → trigger human gate or advance
+9. If not → loop back to 1
 ```
 
 You are monolithic: one process, one task per loop iteration, no multi-agent communication complexity. You delegate to sub-agents defined in `.github/agents/*.agent.md` but you are the single thread of control.
@@ -222,6 +223,18 @@ All features → Infra contract    (infra aggregated across all features)
 **Goal:** All tests pass — unit, Gherkin step definitions, Playwright e2e.
 
 **Entry condition:** Phase 5 approved. All contracts finalized. `state.json` contains the full `features[]` array with test file paths, dependency order, failing test details, and contract output files — enough context for any session to drive the implementation loop.
+
+**Step 0: Research & Discovery (mandatory)**
+
+Before writing any implementation code, invoke the `research-best-practices` skill (`.github/skills/research-best-practices/`). For each feature:
+
+1. Inventory the technologies, SDKs, and Azure services required by its contracts
+2. Query MCP tools for current best practices and latest APIs (see §12 for tool details)
+3. Check `.github/skills/` for existing skills that cover the task
+4. Verify `package.json` dependency versions are current
+5. Record findings in `state.json` under the feature's metadata
+
+This step prevents stale-knowledge bugs, deprecated API usage, and reinventing patterns that already have a skill. It runs once per feature and results carry forward to all slices.
 
 **Architecture: Contract-Driven Parallel Slices**
 
@@ -896,3 +909,38 @@ shells/nextjs-typescript/
 | `azd deploy` | Build containers and deploy to Azure Container Apps |
 | `azd env get-values` | Retrieve deployed URLs |
 | `azd down` | Tear down all resources |
+
+---
+
+## 12. Research & Discovery Protocol
+
+Before writing implementation code, agents **must** research current best practices using the MCP tools available in the environment. This prevents stale-knowledge bugs, deprecated API usage, and missed patterns.
+
+### Available MCP Research Tools
+
+| Tool | What It Provides | When to Use |
+|------|-----------------|-------------|
+| **Microsoft Learn MCP** — `microsoft_docs_search`, `microsoft_code_sample_search`, `microsoft_docs_fetch` | Official Azure/Microsoft documentation, code samples, and API reference | Any Azure SDK, Azure service, .NET Aspire, Entra ID, Container Apps, Bicep, or Microsoft technology |
+| **Context7** | Up-to-date documentation and usage examples for open-source libraries and frameworks | npm packages, Next.js, Express, Tailwind, Playwright, Vitest, any OSS library |
+| **DeepWiki** | Deep architectural understanding of open-source repositories — internals, patterns, extension points | Understanding how a library works under the hood, finding undocumented patterns, evaluating library fit |
+| **Azure Best Practices** — `get_azure_bestpractices` | Curated Azure best practices for code generation, operations, and deployment | Before writing any Azure infrastructure code, SDK integration, or deployment config |
+| **Web Search** — `web_search` | Recent releases, changelogs, migration guides, community patterns | Checking for breaking changes, new major versions, migration paths |
+
+### Research Protocol
+
+1. **Inventory** — List technologies, SDKs, and services the current task requires
+2. **Check local first** — Scan `.github/skills/` for an existing skill; check `package.json` for current versions
+3. **Query MCP tools** — Use the appropriate tool(s) from the table above for each technology
+4. **Verify versions** — Confirm dependency versions are current; flag any needing updates
+5. **Summarize** — Record key findings (recommended patterns, anti-patterns, version updates) in `state.json` under the feature metadata
+6. **Proceed** — Use the researched patterns in implementation; cite sources in code comments for non-obvious decisions
+
+### When Research Applies
+
+- **Phase 6 (Implementation):** Mandatory before the first slice of each feature (via `research-best-practices` skill)
+- **Phase 7 (Deployment):** Query Azure Best Practices and Microsoft Learn before writing infra/Bicep
+- **Any phase:** When introducing a technology, SDK, or pattern not already established in the project
+
+### Caching
+
+Research results are scoped per feature and recorded in `state.json`. If Feature B uses the same technology as Feature A, reuse the findings unless the context differs significantly.
