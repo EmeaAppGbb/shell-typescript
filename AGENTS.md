@@ -839,9 +839,7 @@ shells/nextjs-typescript/
 │   └── contracts/                    # Contracts generated in Phase 5
 │       ├── api/                      # API contracts per feature (OpenAPI-style YAML)
 │       └── infra/                    # Infrastructure contract (resources.yaml)
-├── AppHost/                          # .NET Aspire orchestrator for local dev
-│   ├── apphost.cs                    # Service wiring (API, Web, Docs)
-│   └── appsettings.json
+├── apphost.cs                        # .NET Aspire orchestrator (file-based AppHost)
 ├── infra/                            # Azure Bicep templates
 │   ├── main.bicep
 │   └── modules/                      # Container Apps, ACR, monitoring
