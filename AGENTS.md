@@ -848,7 +848,20 @@ shells/nextjs-typescript/
 ├── e2e/                              # Playwright end-to-end tests
 │   ├── playwright.config.ts
 │   ├── smoke.spec.ts                 # Smoke tests (@smoke tag)
-│   └── pages/                        # Page Object Models
+│   └── pages/                        # Page Object Models (derived from Phase 2 prototypes)
+├── docs/                             # MkDocs documentation (auto-generated)
+│   ├── index.md                      # User manual index (design + features)
+│   ├── design/                       # Design reference (copied from specs/ui/ by docs:generate)
+│   │   ├── screen-map.md             # Screen inventory (from Phase 2)
+│   │   ├── design-system.md          # Design tokens (from Phase 2)
+│   │   ├── components.md             # Component inventory (from Phase 2)
+│   │   ├── walkthrough.md            # Embedded walkthrough wrapper
+│   │   ├── walkthrough.html          # Replayable visual walkthrough
+│   │   ├── flow-walkthrough.md       # Flow narratives per FRD
+│   │   └── prototypes/               # HTML wireframes (browsable from docs)
+│   ├── features/                     # Feature pages (Gherkin + screenshots + wireframe embeds)
+│   ├── screenshots/                  # Playwright screenshots per feature/scenario
+│   └── nav.yml                       # Auto-generated navigation
 ├── tests/
 │   └── features/                     # Cucumber.js (Gherkin step definitions)
 │       ├── step-definitions/         # TypeScript step definition files
