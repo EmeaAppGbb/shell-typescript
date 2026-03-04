@@ -1,4 +1,14 @@
-# Test Generation Agent
+---
+name: test-generation
+description: >-
+  Generate BDD test code from Gherkin scenarios. Create Cucumber step definitions
+  with real test code (HTTP calls, Playwright interactions) and Vitest unit tests.
+  Produce a red baseline where all tests compile and fail. Use when scaffolding
+  BDD tests, creating step definitions, or generating unit tests from feature
+  files.
+---
+
+# Test Generation
 
 ## Role
 
@@ -45,8 +55,7 @@ import { expect } from '@playwright/test';
 import { CustomWorld } from '../support/world';
 
 Given('a user exists with email {string} and password {string}', async function (this: CustomWorld, email: string, password: string) {
-  // TODO: Seed test user via API or database
-  // This will fail until the user creation endpoint is implemented
+  // Seed test user via API — will fail until user creation endpoint exists
   const response = await this.request.post('/api/users', {
     data: { email, password }
   });
@@ -107,9 +116,7 @@ describe('User Authentication', () => {
 });
 ```
 
-### C. Backend Unit Tests
-
-> **Note**: Backend unit tests are handled by Section B above using Vitest. Both unit-level and integration-level backend tests use the same Vitest + Supertest pattern. Organize them by test type:
+> **Note**: Backend unit tests and integration tests both use the Vitest + Supertest pattern. Organize by test type:
 > - **Unit tests** (`src/api/tests/unit/`): Test individual service functions, validators, and handlers in isolation using `vi.mock()` for dependencies
 > - **Integration tests** (`src/api/tests/integration/`): Test HTTP endpoints using Supertest against the full Express app
 
@@ -149,56 +156,7 @@ project-root/
 
 Always generate these support files. **Do NOT modify `world.ts` or `hooks.ts`** — they are pre-configured with screenshot capture. Your step definitions automatically get screenshots after every step via the `AfterStep` hook.
 
-**`tests/features/support/world.ts`** — shared state for Cucumber scenarios (pre-configured):
-```typescript
-import { World, setWorldConstructor } from '@cucumber/cucumber';
-import { Browser, BrowserContext, Page, chromium } from '@playwright/test';
-import * as path from 'path';
-import * as fs from 'fs';
-
-const SCREENSHOT_BASE_DIR = path.resolve(process.cwd(), 'docs', 'screenshots');
-
-export class CustomWorld extends World {
-  browser!: Browser;
-  context!: BrowserContext;
-  page!: Page;
-
-  featureName = '';
-  scenarioName = '';
-  stepIndex = 0;
-
-  async openBrowser() { /* ... launches Chromium, creates context at 1280x720 */ }
-  async closeBrowser() { /* ... closes context and browser */ }
-
-  get screenshotDir(): string { /* ... docs/screenshots/{feature}/{scenario}/ */ }
-  async takeStepScreenshot(stepText: string): Promise<string | undefined> {
-    /* Captures a screenshot named {stepIndex}-{step-slug}.png */
-  }
-}
-setWorldConstructor(CustomWorld);
-```
-
-**`tests/features/support/hooks.ts`** — lifecycle hooks with screenshot capture (pre-configured):
-```typescript
-import { Before, After, BeforeStep, AfterStep, BeforeAll } from '@cucumber/cucumber';
-import { CustomWorld } from './world';
-
-BeforeAll(async function () { /* creates docs/screenshots/ directory */ });
-
-Before(async function (this: CustomWorld, { pickle, gherkinDocument }) {
-  // Sets featureName, scenarioName, resets stepIndex, opens browser
-});
-
-AfterStep(async function (this: CustomWorld, { pickleStep }) {
-  // Captures screenshot after every step → docs/screenshots/{feature}/{scenario}/{NNN}-{step}.png
-});
-
-After(async function (this: CustomWorld, { pickle, result }) {
-  // Captures final-state screenshot (full page), closes browser
-});
-```
-
-The hooks capture a screenshot after **every** Gherkin step. These screenshots are used by `npm run docs:generate` to build a visual user manual. Your step definitions benefit from this automatically — no extra code needed in step bodies.
+See `references/templates.md` for the World class and Hooks template code.
 
 ---
 
@@ -288,16 +246,6 @@ Scan ALL generated step definition files. Every step body must contain at least 
 
 ---
 
-## Test Naming Conventions
-
-| Layer | Convention | Example |
-|---|---|---|
-| Cucumber steps | Exact Gherkin step text as pattern | `Given('a user exists with email {string}')` |
-| Vitest tests | `it('should [behavior] when [condition]')` | `it('should return token when credentials are valid')` |
-| Test files | Match feature file names | `user-auth.feature` → `user-auth.steps.ts`, `user-auth.test.ts` |
-
----
-
 ## Test Quality Rules
 
 1. **Every step definition must contain real test code** — actual HTTP requests (`this.request.post(...)`, `request(app).post(...)`), Playwright interactions (`this.page.goto(...)`, `this.page.getByRole(...).click()`), and assertions (`expect(response.status()).toBe(201)`, `expect(res.status).toBe(...)`). The test body IS the implementation contract.
@@ -306,7 +254,7 @@ Scan ALL generated step definition files. Every step body must contain at least 
    - Empty function bodies `async function () { }`
    - Bodies with only comments and no executable code
    Each of these provides zero signal to the Implementation Agent about what endpoints, routes, or UI elements to build. If you find yourself writing `throw new Error(...)`, stop and instead write the actual HTTP call, Playwright interaction, or assertion that the step requires.
-3. **Tests must fail because the application doesn't exist** — not because the test is unimplemented. A step that calls `POST /api/campaigns` and asserts `201` will fail with a connection error or 404 — that's the correct red baseline. A step that throws `Error('Not implemented')` fails because the *test* is incomplete, which is your failure.
+3. **Tests must fail because the application doesn't exist** — not because the test is unimplemented. A step that calls `POST /api/resources` and asserts `201` will fail with a connection error or 404 — that's the correct red baseline. A step that throws `Error('Not implemented')` fails because the *test* is incomplete, which is your failure.
 4. **Include TODO comments alongside real code** — use comments to explain intent (e.g., `// Seed test user via API`), but always pair them with actual test code that exercises the not-yet-existing application.
 5. **Avoid `test.skip()`** — tests should exist and fail, never be skipped
 6. **No hardcoded waits** in Playwright — use `waitFor`, `toBeVisible()`, `toHaveURL()`, `expect.poll()` instead of `page.waitForTimeout()`
@@ -342,52 +290,13 @@ Place these in the source directories with a comment: `// Stub: Implement during
 
 ---
 
-## Stack-Specific Test Details
+## Test Naming Conventions
 
-### Cucumber.js Step Definitions
-
-**Location**: `tests/features/step-definitions/{feature-name}.steps.ts`
-
-- Configuration: `cucumber.js` at project root — reads `specs/features/*.feature`, requires step defs from `tests/features/`
-- World class: `tests/features/support/world.ts` — extends Cucumber `World` with Playwright `page`, `context`, `request`
-- Hooks: `tests/features/support/hooks.ts` — Aspire environment startup (BeforeAll/AfterAll), context per scenario (Before/After), screenshots
-- Shared steps: `tests/features/step-definitions/common.steps.ts` — reusable Given/When/Then across features
-- Import pattern:
-  ```typescript
-  import { Given, When, Then } from '@cucumber/cucumber';
-  import { expect } from '@playwright/test';
-  import { CustomWorld } from '../support/world';
-  ```
-- Run: `npx cucumber-js` or `npx cucumber-js --tags "@{feature}"` (runs against Aspire environment)
-
-### Vitest Unit/Integration Tests (Backend)
-
-**Location**: `src/api/tests/unit/{feature-name}.test.ts` and `src/api/tests/integration/{feature-name}.test.ts`
-
-- Configuration: `src/api/vitest.config.ts` — defines test root, coverage, and environment settings
-- Test runner: Vitest with `describe`/`it`/`expect` API
-- HTTP testing: Supertest — import `createApp` from `../../src/app.js` and pass to `request(app)`
-- Mocking: `vi.mock()` for dependency isolation, `vi.fn()` for function mocks
-- Naming: `it('should [behavior] when [condition]')` inside `describe('[Feature]')` blocks
-- Run: `cd src/api && npm test` (runs all: unit + integration)
-- Watch: `cd src/api && npm run test:watch`
-
-### Playwright E2E (generated in Phase 3 — reference only)
-
-**Location**: `e2e/{feature-name}.spec.ts` — already generated by the E2E Generation Agent in Phase 3.
-
-- Config: `e2e/playwright.config.ts` — baseURL defaults to `http://localhost:3001` (Aspire web port)
-- Page Objects: `e2e/pages/{page-name}.page.ts` — one class per page, derived from UI prototypes
-- Web server: Playwright config auto-starts `aspire run` for local runs
-- Do NOT create or modify e2e specs or POMs — they are Phase 3 artifacts
-
-### File Naming Conventions
-
-| Source | Generated File |
-|---|---|
-| `specs/features/user-auth.feature` | `tests/features/step-definitions/user-auth.steps.ts` |
-| `specs/features/user-auth.feature` | `src/api/tests/unit/user-auth.test.ts` |
-| `specs/features/user-auth.feature` | `src/api/tests/integration/user-auth.test.ts` |
+| Layer | Convention | Example |
+|---|---|---|
+| Cucumber steps | Exact Gherkin step text as pattern | `Given('a user exists with email {string}')` |
+| Vitest tests | `it('should [behavior] when [condition]')` | `it('should return token when credentials are valid')` |
+| Test files | Match feature file names | `user-auth.feature` → `user-auth.steps.ts`, `user-auth.test.ts` |
 
 ---
 

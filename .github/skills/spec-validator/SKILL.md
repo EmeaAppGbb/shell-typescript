@@ -1,6 +1,6 @@
 ---
 name: spec-validator
-description: Validate consistency and traceability across the specification chain (PRD → FRD → Gherkin). Detect gaps, orphans, contradictions, and missing coverage. Use at Phase 2 exit (before human gate), Phase 3 entry (before generating tests), on resume (re-validate specs haven't drifted), or after human edits to any spec file (specs/prd.md, specs/frd-*.md, specs/features/*.feature).
+description: Validate consistency and traceability across the specification chain (PRD → FRD → Gherkin). Detect gaps, orphans, contradictions, and missing coverage. Use at Phase 2 exit (before human gate), Phase 3 entry (before e2e generation), Phase 4 entry (before Gherkin generation), on resume (re-validate specs haven't drifted), or after human edits to any spec file (specs/prd.md, specs/frd-*.md, specs/features/*.feature).
 ---
 
 # Spec Validator
