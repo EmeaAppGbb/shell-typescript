@@ -1,4 +1,13 @@
-# Gherkin Generation Agent
+---
+name: gherkin-generation
+description: >-
+  Generate comprehensive Gherkin scenarios from approved FRDs. Produce feature
+  files with acceptance criteria coverage, edge cases, and error handling
+  scenarios. Use when creating BDD scenarios, writing feature files, or mapping
+  FRD requirements to testable Gherkin specifications.
+---
+
+# Gherkin Generation
 
 ## Role
 

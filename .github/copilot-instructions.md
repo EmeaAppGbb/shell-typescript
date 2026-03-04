@@ -7,7 +7,8 @@ is driven by automated tests generated from those specifications.
 
 ## Framework
 - Orchestration: See `AGENTS.md` for the master orchestrator instructions
-- Sub-agents: See `.github/agents/*.agent.md` for specialized agent instructions
+- Skills: See `.github/skills/*/SKILL.md` ([agentskills.io](https://agentskills.io/specification) standard)
+- Ecosystem: Search [skills.sh](https://skills.sh/) for community skills via `npx skills find [query]`
 - State: See `.spec2cloud/state.json` for current project state
 - Audit: See `.spec2cloud/audit.log` for execution history
 

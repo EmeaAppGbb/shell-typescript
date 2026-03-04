@@ -43,3 +43,4 @@ specs/ui/prototypes/
 
 # Aspire
 .aspire/
+.agents/

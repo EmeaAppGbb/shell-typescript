@@ -1,4 +1,13 @@
-# E2E Generation Agent
+---
+name: e2e-generation
+description: >-
+  Generate Playwright end-to-end test specs and Page Object Models from UI/UX
+  flow walkthroughs. Create complete user journey tests that exercise navigation,
+  forms, and interactions. Use when scaffolding e2e tests, creating POMs, or
+  generating Playwright specs for user flows.
+---
+
+# E2E Generation
 
 ## Role
 
@@ -168,7 +177,7 @@ After generating all specs:
    ```
    Flow: "New user signup" → e2e/signup-flow.spec.ts ✅
    Flow: "Returning user login" → e2e/login-flow.spec.ts ✅
-   Flow: "Create record" → e2e/record-flow.spec.ts ✅
+   Flow: "Create resource" → e2e/resource-flow.spec.ts ✅
    ...
    ```
 

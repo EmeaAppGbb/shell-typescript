@@ -13,15 +13,17 @@ Ground every implementation decision in current, authoritative sources before wr
 
 ## When to Use
 
-- **Always** at the start of Phase 6 (Implementation) — before the first line of code
-- When adding a new Azure service, SDK, or infrastructure resource
+- **Always** at the start of Step 3 (Implementation) — before the first line of code
+- When adding a new Azure service, SDK, or infrastructure resource not covered by `specs/tech-stack.md`
 - When choosing between libraries, patterns, or architectural approaches
 - When a package version may have breaking changes since last known state
 - When the task involves an area you haven't recently verified (auth, storage, AI, etc.)
+- **Note:** Phase 1d (Tech Stack Resolution) performs comprehensive upfront research. This skill handles targeted, increment-specific research that builds on those resolved decisions.
 
 ## Inputs
 
-- Feature contracts from Phase 5 (API specs, shared types, infra contract)
+- **`specs/tech-stack.md`** — Pre-resolved technology decisions from Phase 1d (check this FIRST)
+- Feature contracts from Step 2 (API specs, shared types, infra contract)
 - The project's current `package.json` dependencies and versions
 - The specific technologies and services the feature requires
 
@@ -45,8 +47,9 @@ Use these MCP tools in priority order:
 
 ## Steps
 
-1. **Inventory** — List the technologies, SDKs, and services needed for the current feature/slice
-2. **Check skills** — Scan `.github/skills/` for existing skills that cover any of these technologies
+1. **Consult tech stack** — Read `specs/tech-stack.md` first. Most technology decisions, versions, and patterns should already be resolved from Phase 1d. Only research further if the current increment needs something not covered.
+2. **Inventory** — List the technologies, SDKs, and services needed for the current feature/slice that are NOT already covered by `specs/tech-stack.md`
+3. **Check skills** — Scan `.github/skills/` for existing skills that cover any of these technologies
 3. **Research each technology** — For each item in the inventory:
    a. Query **Microsoft Learn MCP** for Azure/Microsoft technologies
    b. Query **Context7** for latest framework/library docs and examples

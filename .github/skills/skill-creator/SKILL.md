@@ -156,7 +156,7 @@ bigquery-skill/
     ├── finance.md (revenue, billing metrics)
     ├── sales.md (opportunities, pipeline)
     ├── product.md (API usage, features)
-    └── marketing.md (campaigns, attribution)
+    └── content.md (asset management, reporting)
 ```
 
 When a user asks about sales metrics, Claude only reads sales.md.
