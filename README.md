@@ -1,127 +1,85 @@
-#        Next.js + TypeScript Shellspec2cloud 
+# spec2cloud · Next.js + TypeScript Shell
 
- deploy to Azure.**
+**Describe what to build → AI agents handle the how → deploy to Azure.**
 
-spec2cloud is an AI-orchestrated development pipeline. You describe *what* to build; agents handle the * from interactive UI prototypes to production deployment, with human approval at every critical gate.how* 
-
-```
- Deploy
-```         
+spec2cloud is a GitHub template that turns a product requirements document into a deployed full-stack app. AI agents drive every phase — from spec refinement and interactive UI prototypes to test generation, implementation, and Azure deployment — with human approval gates at each step.
 
 ## Why spec2cloud?
 
-| Problem | spec2cloud Solution |
-|---------|-------------------|
-| AI generates code that doesn't match what you wanted | **UI/UX prototypes** you browse and approve *before* any code is written |
-| Generated tests don't cover real user flows | **Gherkin scenarios grounded in prototype  every test traces to a wireframe |screens** 
-| Stale APIs, deprecated patterns | **Research & Discovery** queries live docs (Microsoft Learn, Context7, DeepWiki) before implementation |
-| Docs are an afterthought | **Auto-generated user manual** with wireframe embeds alongside test screenshots |
-| "It works on my machine" | **Aspire orchestration** + **Azure Container Apps** deployment in one command |
+| Problem | How spec2cloud solves it |
+|---------|--------------------------|
+| AI writes code that doesn't match your intent | You approve **browsable UI prototypes** before any code is generated |
+| Generated tests miss real user flows | **Gherkin scenarios trace back to prototype screens** — nothing is invented in a vacuum |
+| Stale APIs and deprecated patterns | Agents **query live docs** (Microsoft Learn, Context7, DeepWiki) before writing a single line |
+| "It works on my machine" | **Aspire orchestration** locally, **Azure Container Apps** in production — same topology |
 
-## The 8 Phases
+## How it works
 
-| # | Phase | What Happens | Gate |
-|---|-------|-------------|------|
-| 0 | **Shell Setup** | Scaffold project, verify structure | | 
- FRD breakdown | | 
-| 2 | **UI/UX Design** | Interactive HTML wireframes, served for live browsing, replayable walkthrough | | 
-| 3 | **Gherkin** | Feature files grounded in prototype screen names and components | | 
-| 4 | **Test Generation** | Page Object Models from wireframes, red baseline (all tests  |fail) | 
-| 5 | **Contracts** | API specs, shared TypeScript types, infra requirements | | 
- Integration), research-first | | 
-| 7 | **Deployment** | Azure Container Apps via  ERROR: no project | exists; to create a new project, run `azd init`, smoke tests | 
+```
+PRD ──► Spec Refinement ──► UI/UX Prototypes ──► Gherkin & Tests ──► Contracts ──► Implementation ──► Deploy
+          (FRDs)           (browsable HTML)      (red baseline)     (API specs,     (API → Web →       (Azure
+         ▲ approve          ▲ approve            ▲ approve          shared types)    Integration)       Container
+                                                                                   ▲ approve            Apps)
+                                                                                                      ▲ verify
+```
 
-### What makes Phase 2 special
+Human approval gates pause the pipeline at every critical transition — nothing ships without your sign-off.
 
-UI/UX prototypes aren't throwaway  they're **first-class specs** that persist and ground every downstream phase:wireframes 
+1. **Write a PRD** — plain-language product requirements in `specs/prd.md`
+2. **Agents refine** — PRD → FRDs, reviewed through product + technical lenses
+3. **Prototype** — interactive HTML wireframes you browse and approve in your browser
+4. **Test-first** — Gherkin scenarios + Playwright e2e + Vitest unit tests, all failing (red baseline)
+5. **Contracts** — API specs, shared TypeScript types, and infra requirements generated from specs
+6. **Implement** — agents write code to make tests green (API slice → Web slice → Integration)
+7. **Ship** — `azd up` deploys to Azure Container Apps; smoke tests verify production
 
-- **Served live** via  browse them in your own browser during reviewHTTP 
-- **Component inventory** defines the vocabulary for Gherkin scenarios, test selectors, and React components
-- **`data-testid` selectors** in prototypes become Page Object Model anchors in Phase 4
-- **Replayable walkthrough** (`walkthrough.html`) is embedded in the docs site
-- **Feedback flows  if prototyping reveals spec gaps, FRDs/PRD get updated with `[UI-REVISED]` annotationsupstream** 
-
-## Quick Start
+## Quick start
 
 ```bash
-# 1. Create from template
+# Create your repo from this template
 gh repo create my-app --template EmeaAppGbb/spec2cloud-shell-nextjs-typescript
 cd my-app && npm install
-
-# 2. Install sub-project dependencies
 cd src/web && npm install && cd ../..
 cd src/api && npm install && cd ../..
 
-# 3. Run with Aspire (recommended)
-npm run dev:aspire          # API + Web + Docs with service discovery
+# Run locally (Aspire recommended)
+npm run dev:aspire        # API + Web + Docs with service discovery
 
-# Or run indi# Or run indi# Or run indi            # concurrently: API (3001) + Web (3000) + Docs (8000)
+# Write your PRD and let agents take over
+code specs/prd.md
 
-# 4. Write your PRD and let the agents take over
-code specs/prd.md
-code specs/prd.md
-D and let the agents take over
-  # concurrently: APd | Next.js 16, TypeScript, App Router, Tailwind CSS |
-| Backend | Express.js, TypeScript, Node.js |
-| Testing | Playwright (       Cucumber.js (       Vitest (       Supertest (API) |unit) BDD) e2e) 
-| Docs | MkDocs  auto-generated from wireframes + Gherkin + screenshots |Material 
-| Orchestration | .NET Aspire (local service discovery & dashboard) |
+# Deploy to Azure
+azd auth login && azd up
+```
+
+## Tech stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Next.js · TypeScript · App Router · Tailwind CSS |
+| Backend | Express.js · TypeScript · Node.js |
+| Testing | Playwright (e2e) · Cucumber.js (BDD) · Vitest + Supertest (unit) |
+| Docs | MkDocs Material — auto-generated from wireframes + Gherkin + screenshots |
+| Local orchestration | .NET Aspire (service discovery & dashboard) |
 | Deployment | Azure Container Apps via Azure Developer CLI (`azd`) |
-| AI Tools | Microsoft Learn                      Azure Best Practices |DeepWiki Context7 MCP 
+| AI research | Microsoft Learn · Context7 · DeepWiki · Azure Best Practices MCP |
 
-## Documentation Pipeline
+## Key commands
 
-The docs site combines **design intent** with **living implementation**:
-
-```
-  docs/design/        (wireframes, components, walkthrough)
-  docs/features/      (Gherkin scenarios + screenshots)
-                        docs/index.md       (unified manual with Design + Features sections)
-```
-
-Each feature page **embeds the related wireframe prototype** alongside Playwright  showing *what was designed* next to *what was built*.screenshots 
-
-```bash
-npm run docs:full     # capture screenshots + generate all docs
-npm run docs:serve    # preview at http://localhost:8000
-```
-
-## Testing Strategy
-
-Tests are generated in Phase 4 as a **red baseline** (compile but fail). Implementation makes them pass across parallel slices:
-
-```
-Per feature:
- [Integration: Cucumber + Playwright]
- [Web Slice: Components + Build]    
-```
-
-Page Object Models are derived from Phase 2 wireframe `data-testid`  tests interact with the same UI structure the human approved.selectors 
-
-## Scripts
-
-| Command | Description |
+| Command | What it does |
 |---------|-------------|
-| `npm run dev:aspire` | Run all services with .NET Aspire |
+| `npm run dev:aspire` | Run all services with Aspire |
 | `npm run dev:all` | API + Web + Docs concurrently |
-| `npm run test:all` | All test suites (unit + BDD + e2e) |
-| `npm run docs:full` | Screenshots + generate docs |
-| `npm run docs:serve` | Preview docs at localhost:8000 |
-| `npm run build:all` | Build API + Web for production |
-
-## Deploy
-
-```bash
-azd auth login
-azd up              # provision + deploy to Azure Container Apps
-```
+| `npm run test:all` | Unit + BDD + e2e tests |
+| `npm run build:all` | Production build (API + Web) |
+| `npm run docs:full` | Capture screenshots + generate docs |
+| `azd up` | Provision + deploy to Azure |
 
 ## Extending
 
-- **Agents** (`.github/ one agent per phase, fully customizable promptsagents/`) 
-- **Skills** (`.github/ reusable procedures (build-check, test-runner, spec-validator, research-best-practices, deploy-diagnostics)skills/`) 
-- ** swap Next.js/Express for any framework; the pipeline is stack-agnostic at the spec levelStack** 
-- **Orchestrator** (`AGENTS. the central brain; modify phases, gates, or add new onesmd`) 
+- **Skills** (`.github/skills/`) — reusable agent procedures following the [agentskills.io](https://agentskills.io) standard
+- **Orchestrator** (`AGENTS.md`) — the central loop; modify phases, gates, or add new ones
+- **Stack-agnostic** — swap Next.js/Express for any framework; the pipeline works at the spec level
 
 ## License
 
