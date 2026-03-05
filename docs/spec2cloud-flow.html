@@ -858,8 +858,7 @@
       var el = document.getElementById(id);
       el.classList.remove('approved');
       el.querySelector('.gate-icon').textContent = '🔒';
-      var text = el.childNodes[el.childNodes.length - 1];
-      // Restore original text
+      el.classList.remove('pulsing');
     });
   }
 
