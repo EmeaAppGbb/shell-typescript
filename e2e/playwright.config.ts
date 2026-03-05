@@ -8,7 +8,7 @@ export default defineConfig({
   workers: 1,
   reporter: 'html',
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3001',
     trace: 'on-first-retry',
     screenshot: 'on',
     video: 'retain-on-failure',
@@ -19,18 +19,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-  webServer: process.env.PLAYWRIGHT_BASE_URL ? undefined : [
-    {
-      command: 'cd ../src/api && npm run dev',
-      url: 'http://localhost:5001/health',
-      reuseExistingServer: !process.env.CI,
-      timeout: 60000,
-    },
-    {
-      command: 'cd ../src/web && NEXT_PUBLIC_API_URL=http://localhost:5001 npm run dev',
-      url: 'http://localhost:3000',
-      reuseExistingServer: !process.env.CI,
-      timeout: 30000,
-    },
-  ],
+  webServer: process.env.PLAYWRIGHT_BASE_URL ? undefined : {
+    command: 'aspire run --project ../apphost.cs',
+    url: 'http://localhost:3001',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120000,
+    stdout: 'pipe',
+    stderr: 'pipe',
+  },
 });
