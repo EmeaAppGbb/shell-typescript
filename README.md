@@ -15,13 +15,11 @@ spec2cloud is a GitHub template that turns a product requirements document into 
 
 ## How it works
 
-```
-PRD ──► Spec Refinement ──► UI/UX Prototypes ──► Gherkin & Tests ──► Contracts ──► Implementation ──► Deploy
-          (FRDs)           (browsable HTML)      (red baseline)     (API specs,     (API → Web →       (Azure
-         ▲ approve          ▲ approve            ▲ approve          shared types)    Integration)       Container
-                                                                                   ▲ approve            Apps)
-                                                                                                      ▲ verify
-```
+<p align="center">
+  <img src="docs/spec2cloud-flow.gif" alt="spec2cloud animated flow — Ralph Loop, phase pipeline, and increment delivery" width="100%">
+</p>
+
+> **[▶ Interactive version](docs/spec2cloud-flow.html)** — open in your browser for playback controls and speed adjustment.
 
 Human approval gates pause the pipeline at every critical transition — nothing ships without your sign-off.
 
