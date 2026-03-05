@@ -148,11 +148,16 @@ Apply tags consistently:
 
 All e2e tests run against the **Aspire-managed environment**. The Playwright config already handles this:
 
-- `webServer` in `e2e/playwright.config.ts` starts `aspire run`
+- `webServer` in `e2e/playwright.config.ts` starts `aspire run --project ../apphost.cs`
 - Base URL defaults to `http://localhost:3001` (Aspire web port)
 - API is available at `http://localhost:5001` (Aspire API port)
+- Running locally via Aspire is **non-negotiable** — never start API/Web individually
 
 Do NOT modify the Playwright config or webServer setup. Your tests run against the Aspire environment automatically.
+
+### Post-Deployment E2E Verification
+
+After every Azure deployment, the **full E2E suite** (not just `@smoke`) must pass against the deployed URL. This is enforced by the `azure-deployment` skill. When writing e2e tests, ensure they work with both local Aspire and deployed URLs via `PLAYWRIGHT_BASE_URL`.
 
 ---
 

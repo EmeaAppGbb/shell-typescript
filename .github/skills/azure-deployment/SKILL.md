@@ -77,12 +77,15 @@ After a successful deployment, verify the live application works end-to-end.
    - API health: `GET /api/health` → HTTP 200
    - Frontend loads: `GET /` → HTTP 200 with expected content
    - Critical path: Playwright `@smoke` tests against deployed URL
-3. **Configure Playwright**:
+3. **Run the FULL E2E suite** against the deployed URL. This is mandatory — every
+   E2E test that passes locally must also pass on the deployed environment:
    ```bash
-   PLAYWRIGHT_BASE_URL=<deployed-url> npx playwright test --grep @smoke
+   PLAYWRIGHT_BASE_URL=<deployed-url> npx playwright test --config=e2e/playwright.config.ts
    ```
-4. All smoke tests pass → deployment **verified**. Update state and finish.
-5. Any smoke test fails → enter Rollback Protocol.
+   **All E2E tests must pass.** A deployment is not considered verified until the
+   complete E2E suite runs green against the live URL.
+4. All tests pass → deployment **verified**. Update state and finish.
+5. Any test fails → enter Rollback Protocol.
 
 ## Rollback Protocol
 
