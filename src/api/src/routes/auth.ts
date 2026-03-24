@@ -5,7 +5,13 @@ import crypto from 'node:crypto';
 import { getUserByUsername, addUser, getUserById, getUsers } from '../models/user-store.js';
 import { authMiddleware } from '../middleware/auth.js';
 
-const getSecret = (): string => process.env.JWT_SECRET || 'dev-secret';
+const getSecret = (): string => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error('JWT_SECRET environment variable is required');
+  }
+  return secret;
+};
 const USERNAME_REGEX = /^[a-zA-Z0-9_]{3,30}$/;
 
 export function mapAuthEndpoints(app: Express): void {

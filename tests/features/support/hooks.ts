@@ -42,6 +42,7 @@ BeforeAll(async function () {
       stdio: 'pipe',
       detached: true,
       shell: true,
+      env: { ...process.env, JWT_SECRET: process.env.JWT_SECRET || 'test-jwt-secret-for-cucumber' },
     });
     await waitForServer(`${API_URL}/health`, 30000);
   }

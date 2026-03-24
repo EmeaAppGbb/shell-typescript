@@ -15,7 +15,13 @@ declare global {
   }
 }
 
-const getSecret = (): string => process.env.JWT_SECRET || 'dev-secret';
+const getSecret = (): string => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error('JWT_SECRET environment variable is required');
+  }
+  return secret;
+};
 
 export function authMiddleware(req: Request, res: Response, next: NextFunction): void {
   const token = req.cookies?.token;

@@ -25,9 +25,13 @@
     "docs:serve": "npx mkdocs serve",
     "docs:build": "npx mkdocs build"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["spec2cloud", "ai-agents", "azure", "nextjs", "express", "template"],
+  "author": "spec2cloud contributors",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EmeaAppGbb/spec2cloud-shell-nextjs-typescript.git"
+  },
   "type": "commonjs",
   "devDependencies": {
     "@cucumber/cucumber": "^12.6.0",

@@ -75,7 +75,7 @@ Skills live in `.github/skills/` and cover every phase from spec refinement thro
 ### 0.1 Create your repo from the template
 
 ```bash
-gh repo create my-task-board --template EmeaAppGbb/spec2cloud-shell-nextjs-typescript --private
+gh repo create my-task-board --template EmeaAppGbb/spec2cloud-shell-nextjs-typescript
 cd my-task-board
 ```
 

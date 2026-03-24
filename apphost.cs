@@ -6,6 +6,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 // API — Express.js / TypeScript backend
 var api = builder.AddJavaScriptApp("api", "./src/api")
+    .WithEnvironment("JWT_SECRET", "aspire-local-dev-jwt-secret")
     .WithHttpHealthCheck("/health");
 
 // Web — Next.js frontend

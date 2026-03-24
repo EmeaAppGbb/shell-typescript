@@ -79,6 +79,14 @@ azd auth login && azd up
 - **Orchestrator** (`AGENTS.md`) — the central loop; modify phases, gates, or add new ones
 - **Stack-agnostic** — swap Next.js/Express for any framework; the pipeline works at the spec level
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines. Please read our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Security
+
+To report vulnerabilities, see [SECURITY.md](SECURITY.md).
+
 ## License
 
-ISC
+[ISC](LICENSE)

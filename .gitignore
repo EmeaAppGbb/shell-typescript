@@ -44,3 +44,12 @@ specs/ui/prototypes/
 # Aspire
 .aspire/
 .agents/
+
+# Generated settings
+apphost.settings.json
+
+# Secret key files
+*.key
+*.pfx
+*.crt
+*.p12
