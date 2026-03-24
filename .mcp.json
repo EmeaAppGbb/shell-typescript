@@ -25,6 +25,20 @@
     "microsoft.docs.mcp": {
 			"type": "http",
 			"url": "https://learn.microsoft.com/api/mcp"
-		}
+		},
+    "aspire": {
+      "type": "local",
+      "command": "aspire",
+      "args": [
+        "mcp",
+        "start"
+      ],
+      "env": {
+        "DOTNET_ROOT": "${DOTNET_ROOT}"
+      },
+      "tools": [
+        "*"
+      ]
+    }
   }
 }

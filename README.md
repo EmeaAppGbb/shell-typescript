@@ -1,160 +1,115 @@
-# spec2cloud Shell: Next.js + TypeScript
+# spec2cloud · Next.js + TypeScript Shell
 
-## What is this?
+**Transform product specifications into production-ready applications on Azure — AI-powered, human-approved, spec-driven.**
 
-A spec2cloud shell template for building full-stack applications with:
-- **Frontend**: Next.js 16 (TypeScript, App Router, Tailwind CSS)
-- **Backend**: Express.js (TypeScript, Node.js)
-- **Orchestration**: concurrently (local dev)
-- **Deployment**: Azure Container Apps via Azure Developer CLI (azd)
-- **Testing**: Playwright (e2e) + Cucumber.js (Gherkin/BDD) + Vitest (unit/integration)
+spec2cloud is a spec-driven development framework where **specifications are the single source of truth**. Tests are generated from specs, implementation makes those tests pass, and the result is deployed to Azure — all orchestrated by an AI agent with **43 specialized skills**. Every step is resumable, auditable, and requires human approval before anything ships.
 
-spec2cloud is an AI-driven development workflow. You write a PRD, and spec2cloud agents handle the rest — reviewing specs, generating tests, implementing features, and deploying to Azure.
+This is the **Next.js + TypeScript shell** — a pre-configured template with the full tech stack wired up and ready to go.
 
-## Prerequisites
+## Why spec2cloud?
 
-- Node.js 20+
-- Docker (for containerized deployment)
-- Azure Developer CLI (azd) — for Azure deployment
-- GitHub Copilot CLI or compatible AI coding agent
+- **Specifications are the source of truth** — not code, not comments, not wikis
+- **Tests before code** — every feature has tests before implementation begins
+- **Human approval at every gate** — nothing ships without your sign-off
+- **Resumable from any point** — state persisted in git, pick up where you left off
+- **Works for new and existing apps** — greenfield builds new, brownfield modernizes existing
+- **Live research** — agents query Microsoft Learn, Context7, and DeepWiki before writing a single line
+
+## Two Paths, One Pipeline
+
+**Greenfield** — Start with a product idea → PRD → FRD → UI prototypes → Tests → Contracts → Implementation → Deployed on Azure.
+
+**Brownfield** — Start with existing code → Extract specs → Testability gate → Green baseline or behavioral docs → Assess → Plan → Same delivery pipeline.
+
+Both converge on the same **Phase 2 delivery**: Tests → Contracts → Implementation → Deploy.
+
+## How It Works
+
+<p align="center">
+  <img src="docs/spec2cloud-flow.gif" alt="spec2cloud animated flow — Ralph Loop, phase pipeline, and increment delivery" width="100%">
+</p>
+
+> **[▶ Interactive version](docs/spec2cloud-flow.html)** — open in your browser for playback controls and speed adjustment.
+
+Human approval gates pause the pipeline at every critical transition — nothing ships without your sign-off.
+
+1. **Write a PRD** — plain-language product requirements in `specs/prd.md`
+2. **Agents refine** — PRD → FRDs, reviewed through product + technical lenses
+3. **Prototype** — interactive HTML wireframes you browse and approve in your browser
+4. **Test-first** — Gherkin scenarios + Playwright e2e + Vitest unit tests, all failing (red baseline)
+5. **Contracts** — API specs, shared TypeScript types, and infra requirements generated from specs
+6. **Implement** — agents write code to make tests green (API slice → Web slice → Integration)
+7. **Ship** — `azd up` deploys to Azure Container Apps; smoke tests verify production
 
 ## Quick Start
 
-### 1. Clone this template
 ```bash
-git clone <repo-url> my-app
-cd my-app
-```
-
-### 2. Install dependencies
-```bash
-npm install
+# Create your repo from this template
+gh repo create my-app --template EmeaAppGbb/shell-typescript
+cd my-app && npm install
 cd src/web && npm install && cd ../..
 cd src/api && npm install && cd ../..
+
+# Run locally (Aspire recommended)
+npm run dev:aspire        # API + Web + Docs with service discovery
+
+# Write your PRD and let agents take over
+code specs/prd.md
+
+# Deploy to Azure
+azd auth login && azd up
 ```
 
-### 3. Run locally
-```bash
-# Start both services
-npm run dev:all
+## This Shell's Tech Stack
 
-# Or run services individually:
-# API only
-cd src/api && npm run dev
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Next.js · TypeScript · App Router · Tailwind CSS |
+| Backend | Express.js · TypeScript · Node.js |
+| Testing | Playwright (e2e) · Cucumber.js (BDD) · Vitest + Supertest (unit) |
+| Docs | MkDocs Material — auto-generated from wireframes + Gherkin + screenshots |
+| Local orchestration | .NET Aspire (service discovery & dashboard) |
+| Deployment | Azure Container Apps via Azure Developer CLI (`azd`) |
+| AI research | Microsoft Learn · Context7 · DeepWiki · Azure Best Practices MCP |
 
-# Web only
-cd src/web && npm run dev
-```
+## Key Commands
 
-### 4. Write your PRD
-Edit `specs/prd.md` with your product requirements. See the spec2cloud workflow below for what happens next.
+| Command | What it does |
+|---------|-------------|
+| `npm run dev:aspire` | Run all services with Aspire |
+| `npm run dev:all` | API + Web + Docs concurrently |
+| `npm run test:all` | Unit + BDD + e2e tests |
+| `npm run build:all` | Production build (API + Web) |
+| `npm run docs:full` | Capture screenshots + generate docs |
+| `azd up` | Provision + deploy to Azure |
 
-## How spec2cloud Works
+## Learn More
 
-spec2cloud uses an AI orchestrator (defined in `AGENTS.md`) that drives your project through 6 phases. Each phase has a specialized agent and most have human approval gates.
+| Start Here | Then Explore | Go Deeper |
+|-----------|-------------|-----------|
+| [Quick Start](docs/quickstart.md) | [Greenfield Guide](docs/greenfield.md) | [Skills Catalog](docs/skills.md) |
+| [Core Concepts](docs/concepts.md) | [Brownfield Guide](docs/brownfield.md) | [State & Gates](docs/state-and-gates.md) |
+| [Microhack](docs/microhack.md) | [Examples](docs/examples/) | [Architecture](docs/architecture.md) |
 
-### The 6 Phases
+## Extending
 
-| Phase | Name | Agent | Human Gate | What Happens |
-|-------|------|-------|------------|-------------|
-| 0 | Shell Setup | Orchestrator | ✅ | Verify shell structure, scaffold directories |
-| 1 | Spec Refinement | `agents/spec-refinement.md` | ✅ | Review PRD for completeness, break into FRDs |
-| 2 | Gherkin Generation | `agents/gherkin-generation.md` | ✅ | Convert each FRD into Gherkin feature files |
-| 3 | Test Scaffolding | `agents/test-generation.md` | ❌ | Generate test code from Gherkin (red baseline) |
-| 4 | Implementation | `agents/implementation.md` | ✅ | Write code to make all tests pass (TDD) |
-| 5 | Deployment | `agents/deploy.md` | ✅ | Provision Azure resources, deploy, smoke test |
+- **Skills** (`.github/skills/`) — 43 specialized agent procedures following the [agentskills.io](https://agentskills.io) standard
+- **Orchestrator** (`AGENTS.md`) — the central loop; modify phases, gates, or add new ones
+- **Other shells** — swap Next.js/Express for any framework; see [available shells](docs/shells.md)
+- **Community skills** — discover and publish skills at [skills.sh](https://skills.sh/)
 
-### Using the Workflow
+## Contributing
 
-1. **Write your PRD** in `specs/prd.md`
-2. **Start the orchestrator** — open this project in GitHub Copilot (or compatible AI agent) and it will read `AGENTS.md` to begin orchestration
-3. **Approve at gates** — the agent pauses at human gates for your review
-4. **Watch it build** — the agent generates specs → tests → code → deployment
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines. Please read our [Code of Conduct](CODE_OF_CONDUCT.md).
 
-### State Management
+## Security
 
-Progress is tracked in `.spec2cloud/state.json` and `.spec2cloud/audit.log`. The orchestrator reads state on startup and resumes where it left off. You can restart the AI session at any time — it will pick up from the last checkpoint.
-
-## Project Structure
-
-```
-├── AGENTS.md                    # Orchestrator instructions (6-phase workflow)
-├── agents/                      # Specialized agent prompts
-│   ├── spec-refinement.md       # Phase 1: PRD/FRD review
-│   ├── gherkin-generation.md    # Phase 2: FRD → Gherkin
-│   ├── test-generation.md       # Phase 3: Gherkin → tests
-│   ├── implementation.md        # Phase 4: TDD implementation
-│   └── deploy.md                # Phase 5: Azure deployment
-├── specs/                       # Your product specifications
-│   ├── prd.md                   # Product Requirements Document (start here!)
-│   └── features/                # Generated Gherkin .feature files
-├── src/
-│   ├── api/                     # Express.js API (TypeScript)
-│   │   ├── src/index.ts         # API entry point
-│   │   ├── src/routes/          # API route handlers
-│   │   ├── src/models/          # Data models
-│   │   ├── src/services/        # Business logic
-│   │   ├── package.json         # API dependencies
-│   │   └── tests/               # Vitest tests
-│   └── web/                     # Next.js 16 frontend
-│       └── src/app/             # App Router pages & components
-├── e2e/                         # Playwright end-to-end tests
-├── tests/                       # Cucumber.js BDD tests
-├── infra/                       # Azure infrastructure (Bicep)
-├── azure.yaml                   # Azure Developer CLI config
-├── .spec2cloud/                 # Orchestration state
-│   ├── state.json               # Current phase & progress
-│   └── audit.log                # Action history
-└── .github/                     # CI/CD workflows
-```
-
-## Available Scripts
-
-| Script | Command | Description |
-|--------|---------|-------------|
-| Dev | `npm run dev` | Start Next.js dev server only |
-| Dev All | `npm run dev:all` | Start both API and web servers |
-| API Dev | `npm run dev:api` | Start Express API dev server |
-| Build | `npm run build` | Build the Next.js frontend |
-| E2E Tests | `npm run test:e2e` | Run Playwright end-to-end tests |
-| BDD Tests | `npm run test:cucumber` | Run Cucumber.js Gherkin tests |
-| All Tests | `npm run test:all` | Run all test suites |
-
-## Testing Strategy
-
-spec2cloud generates a 4-layer test pyramid:
-
-1. **Vitest** (TypeScript unit tests) — individual service/handler methods
-2. **Cucumber.js** (`tests/features/`) — BDD scenarios from Gherkin specs
-3. **Playwright** (`e2e/`) — full user journey end-to-end tests
-4. **Supertest** (API integration tests) — backend API integration tests
-
-Tests are generated in Phase 3 as a **red baseline** (they compile but fail). Phase 4 implements code to make them pass.
-
-## Deploy to Azure
-
-```bash
-# Login to Azure
-azd auth login
-
-# Provision infrastructure and deploy
-azd up
-```
-
-This creates Azure Container Apps for the API and web frontend, plus supporting infrastructure (Container Registry, monitoring) defined in `infra/`.
-
-## Customizing the Shell
-
-This template ships with a chat-based UI pattern. You can:
-
-- **Replace the frontend** — swap Next.js for any framework
-- **Replace the backend** — swap Express for any Node.js framework
-- **Add services** — add databases, caches, or other backends
-- **Modify agents** — customize the agent prompts in `agents/` for your workflow
-- **Change models** — update `.spec2cloud/models.json` to use different AI models
-
-The key files to customize are `AGENTS.md` (orchestration behavior) and the agent files in `agents/`.
+To report vulnerabilities, see [SECURITY.md](SECURITY.md).
 
 ## License
 
-ISC
+[ISC](LICENSE)
+
+---
+
+**From idea to production — spec-driven, AI-powered, human-approved.**
