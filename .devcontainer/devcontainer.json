@@ -12,10 +12,13 @@
     },
     "ghcr.io/devcontainers/features/docker-in-docker": {
       "moby": false
+    },
+    "ghcr.io/devcontainers/features/dotnet": {
+      "version": "latest"
     }
   },
 
-  "postStartCommand": "copilot plugin marketplace add microsoft/github-copilot-for-azure && copilot plugin install azure@github-copilot-for-azure",
+  "postStartCommand": "copilot plugin install microsoft/github-copilot-for-azure:plugin",
 
   "postCreateCommand": "bash .devcontainer/post-create.sh"
 }

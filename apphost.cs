@@ -1,12 +1,13 @@
-#:sdk Aspire.AppHost.Sdk@13.1.0
-#:package Aspire.Hosting.JavaScript@13.1.0
-#:package Aspire.Hosting.Python@13.1.0
+#:sdk Aspire.AppHost.Sdk@13.2.0
+#:package Aspire.Hosting.JavaScript@13.2.0
+#:package Aspire.Hosting.Python@13.2.0
 
 var builder = DistributedApplication.CreateBuilder(args);
 
 // API — Express.js / TypeScript backend
 var api = builder.AddJavaScriptApp("api", "./src/api")
     .WithEnvironment("JWT_SECRET", "aspire-local-dev-jwt-secret")
+    .WithHttpEndpoint(port: 5001, env: "PORT")
     .WithHttpHealthCheck("/health");
 
 // Web — Next.js frontend
