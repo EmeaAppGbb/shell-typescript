@@ -14,10 +14,12 @@ npx playwright install
 curl -sSL https://aspire.dev/install.sh | bash
 
 # Trust HTTPS dev certificates
-dotnet dev-certs https --trust
+# dotnet dev-certs https --trust
 
 # Install TypeScript language server for Copilot CLI LSP support
 npm install -g typescript-language-server
 
 # Install Python docs tooling
 pip install mkdocs mkdocs-material
+
+source /home/node/.bashrc
