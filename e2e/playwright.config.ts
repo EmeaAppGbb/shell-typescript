@@ -20,7 +20,7 @@ export default defineConfig({
     },
   ],
   webServer: process.env.PLAYWRIGHT_BASE_URL ? undefined : {
-    command: 'aspire run --project ../apphost.cs',
+    command: 'aspire start --nologo && aspire wait web --status healthy --timeout 90 --nologo',
     url: 'http://localhost:3001',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,

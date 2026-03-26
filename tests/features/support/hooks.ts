@@ -2,17 +2,16 @@ import { Before, After, AfterStep, BeforeAll, AfterAll, setDefaultTimeout } from
 import { CustomWorld } from './world';
 import * as fs from 'fs';
 import * as path from 'path';
-import { spawn, ChildProcess } from 'child_process';
+import { execSync, ChildProcess } from 'child_process';
 
 setDefaultTimeout(30_000);
 
 const SCREENSHOT_BASE_DIR = path.resolve(process.cwd(), 'docs', 'screenshots');
 const GENERATE_SCREENSHOTS = process.env.GENERATE_SCREENSHOTS === 'true';
-const WEB_URL = process.env.WEB_URL || 'http://localhost:3000';
+const WEB_URL = process.env.WEB_URL || 'http://localhost:3001';
 const API_URL = process.env.API_URL || 'http://localhost:5001';
 
-let apiProcess: ChildProcess | null = null;
-let webProcess: ChildProcess | null = null;
+let aspireStarted = false;
 
 async function isServerRunning(url: string): Promise<boolean> {
   try {
@@ -23,40 +22,46 @@ async function isServerRunning(url: string): Promise<boolean> {
   }
 }
 
-async function waitForServer(url: string, timeout: number): Promise<void> {
-  const start = Date.now();
-  while (Date.now() - start < timeout) {
-    if (await isServerRunning(url)) return;
-    await new Promise(r => setTimeout(r, 500));
+function isAspireRunning(): boolean {
+  try {
+    const output = execSync('aspire ps --format Json --nologo 2>/dev/null', { encoding: 'utf-8' });
+    const parsed = JSON.parse(output);
+    return Array.isArray(parsed) && parsed.length > 0;
+  } catch {
+    return false;
   }
-  throw new Error(`Server at ${url} did not start within ${timeout}ms`);
 }
 
 BeforeAll(async function () {
   fs.mkdirSync(SCREENSHOT_BASE_DIR, { recursive: true });
 
-  // Start API server if not already running
+  // Use Aspire to orchestrate all services (API + Web)
   if (!(await isServerRunning(`${API_URL}/health`))) {
-    apiProcess = spawn('npm', ['run', 'dev'], {
-      cwd: path.resolve(process.cwd(), 'src/api'),
-      stdio: 'pipe',
-      detached: true,
-      shell: true,
-      env: { ...process.env, JWT_SECRET: process.env.JWT_SECRET || 'test-jwt-secret-for-cucumber' },
-    });
-    await waitForServer(`${API_URL}/health`, 30000);
-  }
+    if (!isAspireRunning()) {
+      console.log('Starting Aspire AppHost...');
+      execSync('aspire start --nologo', {
+        cwd: process.cwd(),
+        stdio: 'inherit',
+        timeout: 60000,
+      });
+      aspireStarted = true;
+    }
 
-  // Start web server if generating screenshots and not already running
-  if (GENERATE_SCREENSHOTS && !(await isServerRunning(WEB_URL))) {
-    webProcess = spawn('npm', ['run', 'dev'], {
-      cwd: path.resolve(process.cwd(), 'src/web'),
-      stdio: 'pipe',
-      detached: true,
-      shell: true,
-      env: { ...process.env, PORT: '3000' },
+    // Wait for API to be healthy
+    console.log('Waiting for API to be healthy...');
+    execSync('aspire wait api --status healthy --timeout 60 --nologo', {
+      stdio: 'inherit',
+      timeout: 70000,
     });
-    await waitForServer(WEB_URL, 60000);
+
+    // Wait for Web to be healthy when generating screenshots or running @ui tests
+    if (GENERATE_SCREENSHOTS) {
+      console.log('Waiting for Web to be healthy...');
+      execSync('aspire wait web --status healthy --timeout 60 --nologo', {
+        stdio: 'inherit',
+        timeout: 70000,
+      });
+    }
   }
 });
 
@@ -132,12 +137,9 @@ After(async function (this: CustomWorld, { result }) {
 });
 
 AfterAll(async function () {
-  if (apiProcess && apiProcess.pid) {
-    try { process.kill(-apiProcess.pid, 'SIGTERM'); } catch { /* already stopped */ }
-    apiProcess = null;
-  }
-  if (webProcess && webProcess.pid) {
-    try { process.kill(-webProcess.pid, 'SIGTERM'); } catch { /* already stopped */ }
-    webProcess = null;
+  // Stop Aspire if we started it
+  if (aspireStarted) {
+    try { execSync('aspire stop --nologo', { stdio: 'inherit', timeout: 15000 }); } catch { /* already stopped */ }
+    aspireStarted = false;
   }
 });

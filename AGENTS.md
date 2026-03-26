@@ -536,8 +536,8 @@ infra/            # Azure Bicep templates
 |---|---|---|
 | Unit tests (API) | `cd src/api && npm test` | Vitest + Supertest, runs all API tests |
 | Unit tests (API, watch) | `cd src/api && npm run test:watch` | Re-runs on file changes |
-| Cucumber/Gherkin | `npx cucumber-js` | Runs against Aspire environment (auto-started by hooks) |
-| Playwright e2e | `npx playwright test --config=e2e/playwright.config.ts` | Runs against Aspire environment (auto-started by webServer config) |
+| Cucumber/Gherkin | `npx cucumber-js` | Runs against Aspire environment (auto-started by hooks via `aspire start` + `aspire wait`) |
+| Playwright e2e | `npx playwright test --config=e2e/playwright.config.ts` | Runs against Aspire environment (auto-started by webServer config via `aspire start` + `aspire wait`) |
 | Playwright specific | `npx playwright test e2e/{feature}.spec.ts` | Single feature e2e against Aspire |
 | Playwright smoke | `npx playwright test --grep @smoke` | Smoke tests only |
 | Playwright UI mode | `npx playwright test --ui` | Interactive debugging |
@@ -547,9 +547,15 @@ infra/            # Azure Bicep templates
 
 | Service | Command | URL |
 |---|---|---|
-| **Aspire (all services)** | `aspire run` | Web: http://localhost:3001, API: http://localhost:5001 |
+| **Aspire (all services)** | `aspire start` | Web: http://localhost:3001, API: http://localhost:5001 |
+| Wait for healthy | `aspire wait api --status healthy` | Blocks until API is ready |
+| Describe resources | `aspire describe` | Show resource status, health, endpoints |
+| View logs | `aspire logs <resource>` | Stream console logs for a resource |
+| Stop Aspire | `aspire stop` | Clean shutdown of all resources |
 | Frontend (standalone) | `cd src/web && npm run dev` | http://localhost:3000 |
 | Backend (standalone) | `cd src/api && npm run dev` | http://localhost:5001 (dev) / 8080 (container) |
+
+> **Always use `aspire start`** (background, non-blocking) — never `aspire run` (interactive, blocking). Use `aspire wait <resource> --status healthy` to block until a resource is ready. Use `aspire describe` to inspect resource status. The Aspire MCP server provides `list_resources`, `list_console_logs`, `list_traces` for runtime observability.
 
 > **Prefer Aspire** for all integration, Cucumber, and e2e testing. Standalone dev servers are only for isolated slice work (API-only or Web-only development).
 
