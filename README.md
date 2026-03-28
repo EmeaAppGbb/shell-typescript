@@ -2,7 +2,7 @@
 
 **Transform product specifications into production-ready applications on Azure — AI-powered, human-approved, spec-driven.**
 
-spec2cloud is a spec-driven development framework where **specifications are the single source of truth**. Tests are generated from specs, implementation makes those tests pass, and the result is deployed to Azure — all orchestrated by an AI agent with **43 specialized skills**. Every step is resumable, auditable, and requires human approval before anything ships.
+spec2cloud is a spec-driven development framework where **specifications are the single source of truth**. Tests are generated from specs, implementation makes those tests pass, and the result is deployed to Azure — all orchestrated by an AI agent with **46 specialized skills**. Every step is resumable, auditable, and requires human approval before anything ships.
 
 This is the **Next.js + TypeScript shell** — a pre-configured template with the full tech stack wired up and ready to go.
 
@@ -38,7 +38,7 @@ Human approval gates pause the pipeline at every critical transition — nothing
 3. **Prototype** — interactive HTML wireframes you browse and approve in your browser
 4. **Test-first** — Gherkin scenarios + Playwright e2e + Vitest unit tests, all failing (red baseline)
 5. **Contracts** — API specs, shared TypeScript types, and infra requirements generated from specs
-6. **Implement** — agents write code to make tests green (API slice → Web slice → Integration)
+6. **Implement** — agents generate or update a DDD domain model, then write code to make tests green (API slice → Web slice → Integration)
 7. **Ship** — `azd up` deploys to Azure Container Apps; smoke tests verify production
 
 ## Quick Start

@@ -61,6 +61,8 @@ Every technology choice is researched, evaluated, and documented as an Architect
 
 ### Step 3: Implementation
 
+Implementation starts by generating or updating `specs/docs/architecture/domain-model.md`: ubiquitous language, bounded contexts, aggregates, entities/value objects, Mermaid diagrams, and a service-boundary assessment.
+
 Three parallel slices:
 
 - **API Slice**: Express routes, services, models (tested with Vitest + Supertest)

@@ -217,7 +217,7 @@ No human gate here — the contracts flow directly from the tests.
 
 ### Step C — Implementation
 
-The agent implements in three slices:
+Before writing production code, the agent generates or updates a DDD/domain model artifact with bounded contexts, aggregates, entities, and a service-boundary assessment. Then it implements in three slices:
 
 | Slice | What gets built |
 |-------|----------------|
@@ -285,7 +285,7 @@ azd down
 | Tech Stack | Queried live docs to pin correct library versions | The stack is appropriate and up to date |
 | Test Scaffolding | Derived Gherkin scenarios and a full test suite from the FRDs | The tests faithfully express your acceptance criteria |
 | Contracts | Generated API specs and shared TypeScript types | — |
-| Implementation | Wrote all backend + frontend code to make tests green | The implementation matches the Gherkin — not just the tests |
+| Implementation | Generated the domain model, then wrote all backend + frontend code to make tests green | The implementation and domain boundaries match the Gherkin — not just the tests |
 | Deployment | Provisioned Azure infra and ran smoke tests against the live URL | Your original PRD user stories work end-to-end in production |
 
 You wrote zero production code. You wrote a spec — and that spec drove every test, every line of implementation, and every deployment check. The code is an artifact. The spec is the asset.

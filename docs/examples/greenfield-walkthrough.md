@@ -46,6 +46,7 @@ Researched and documented as ADRs: Next.js 14, Express + Prisma, PostgreSQL on A
 - Bicep: Container App + PostgreSQL
 
 **Step 3 — Implementation:**
+- Domain model generated from specs + contracts (bounded contexts, aggregates, entities)
 - API + Web slices in parallel
 - Integration wires them together
 - All 44 tests pass 🟢

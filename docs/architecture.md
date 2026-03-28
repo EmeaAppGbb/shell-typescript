@@ -24,6 +24,8 @@ Here are the 11 steps:
 10. **Phase Complete?** — Check if all goals for the current phase are met
 11. **Human Gate / Advance** — Pause for human approval at phase boundaries, or continue to next step
 
+When the loop enters implementation work, Step 6 may chain the `domain-modeling` skill before `implementation` so the app gets a DDD artifact (`specs/docs/architecture/domain-model.md`) with bounded contexts, aggregates/entities, and any explicit service-boundary assessment before production code expands.
+
 ## State Persistence
 
 ![State Management](assets/state-management.svg)
@@ -47,7 +49,7 @@ State is committed to git after every action. This means:
 
 ```
 .github/
-├── skills/              — 43 agentskills.io skills (reusable workflow components)
+├── skills/              — 46 agentskills.io skills (reusable workflow components)
 └── copilot-instructions.md — Stack-specific coding conventions
 
 .spec2cloud/             — State persistence
@@ -65,7 +67,7 @@ specs/                   — Generated specifications
 ├── adrs/                — Architecture Decision Records
 ├── docs/                — Extraction outputs (brownfield)
 │   ├── technology/      — Stack, dependencies
-│   ├── architecture/    — Components, data models
+│   ├── architecture/    — Components, domain models, data models
 │   └── testing/         — Test inventory, coverage
 ├── assessment/          — Assessment reports (brownfield)
 └── increment-plan.md    — Ordered delivery roadmap

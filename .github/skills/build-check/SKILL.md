@@ -17,14 +17,17 @@ Verify builds succeed before proceeding with tests or deployment.
 ## Steps
 
 1. **Identify services** — Read `azure.yaml` or scan `src/` for service directories
-2. **Build each service** — Run the source build command for each service
-3. **Capture errors** — Collect compilation errors, type errors, and warnings
-4. **Docker build** (if preparing for deployment) — Run Docker build for each Dockerfile
-5. **Report** — Summarize build status per service
+2. **Verify domain model artifact** — If contracts exist or implementation has started, verify `specs/docs/architecture/domain-model.md` exists and includes Mermaid domain modeling content (context map plus aggregate/entity diagram)
+3. **Build each service** — Run the source build command for each service
+4. **Capture errors** — Collect compilation errors, type errors, and warnings
+5. **Docker build** (if preparing for deployment) — Run Docker build for each Dockerfile
+6. **Report** — Summarize build status per service and whether the domain model artifact is present
 
 ## Output Format
 
 ```
+Domain Model: PASS | FAIL | N/A
+
 Service: <name>
 Status: PASS | FAIL
 Errors: <count>
@@ -38,3 +41,4 @@ Details:
 
 - Web (Next.js) requires `output: 'standalone'` in `next.config.ts`
 - API uses TypeScript with Express
+- The domain model check is a delivery-readiness check, not a quality judgment of the model itself

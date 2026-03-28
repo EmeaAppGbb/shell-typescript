@@ -21,6 +21,8 @@ You are the **spec2cloud orchestrator**. You drive a project from human-language
 
 You are monolithic: one process, one task per loop iteration. You invoke skills from `.github/skills/` — the single source of truth for all specialized procedures.
 
+When Step 6 enters implementation or architecture-shaping work, it may chain supporting skills before writing production code. In particular, invoke `domain-modeling` before or during implementation to lock ubiquitous language, bounded contexts, aggregate/entity boundaries, Mermaid domain diagrams, and any justified service-boundary proposals.
+
 ---
 
 ## 2. Skills Catalog
@@ -65,6 +67,7 @@ All specialized logic lives in `.github/skills/` following the [agentskills.io](
 | `spec-validator` | Validate PRD → FRD → Gherkin traceability |
 | `test-runner` | Execute test suites and return structured results |
 | `build-check` | Verify builds succeed |
+| `domain-modeling` | Generate DDD domain models, context maps, and service-boundary assessments |
 | `deploy-diagnostics` | Diagnose deployment failures |
 | `research-best-practices` | Query MCP tools for current best practices |
 | `skill-creator` | Create new agentskills.io-compliant skills |
@@ -185,7 +188,7 @@ API contracts, shared TypeScript types, infrastructure requirements. No human ga
 **Commit:** `[increment] {id}/contracts — contracts generated`
 
 #### Step 3: Implementation → `implementation` skill
-API slice → Web slice (parallel) → Integration slice (sequential). Full regression.
+Begin by invoking `domain-modeling` to generate or update `specs/docs/architecture/domain-model.md` (ubiquitous language, bounded contexts, aggregates/entities/value objects, Mermaid diagrams, and service-boundary assessment). Then execute API slice → Web slice (parallel) → Integration slice (sequential). Full regression. If the domain model suggests a bounded-context split into microservices, capture it in an ADR and route it back through planning/human approval rather than silently decomposing the app mid-implementation.
 **Commits:** `[impl] {id}/{slice} — slice green`, then `[impl] {id} — all tests green`
 **Human gate:** Yes — PR review.
 

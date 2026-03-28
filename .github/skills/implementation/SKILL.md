@@ -111,6 +111,27 @@ Before implementing any code for an increment, verify contracts from Step 2:
 3. If any file is missing → STOP. Contracts must be generated first.
 ```
 
+## Domain Modeling Preflight
+
+Before writing production code for an increment, generate or update the domain model:
+
+```
+1. Invoke `domain-modeling` using the FRDs, Gherkin, contracts, and existing architecture/data-model docs.
+2. Ensure `specs/docs/architecture/domain-model.md` exists and includes:
+   a. Ubiquitous language
+   b. Bounded contexts / context map
+   c. Aggregates, entities, value objects, domain services, and domain rules
+   d. Mermaid diagrams
+   e. Service boundary assessment
+3. Use that artifact to keep naming, module boundaries, and contracts aligned.
+4. If the service boundary assessment recommends a microservice split or new deployable boundary:
+   a. Create or update an ADR.
+   b. Return to planning / human review if the split changes the increment architecture.
+   c. Do NOT silently turn a modular monolith increment into distributed services.
+```
+
+The domain model is not optional documentation. It is the design artifact that keeps implementation aligned with the business model rather than drifting into table-driven or route-driven design.
+
 ## API Slice — Overview
 
 Implement backend routes, services, and models using contract types. Runs
@@ -210,6 +231,7 @@ After each **iteration** within a slice (pass or fail):
 - Do NOT skip running a test layer — fix infrastructure issues first.
 - Do NOT claim a feature "done" without all three test layers green.
 - Do NOT add features, endpoints, or behaviors not in Gherkin/FRDs.
+- Do NOT split the system into new microservices or deployable units without an ADR and human approval.
 - Do NOT optimize prematurely — make it work first.
 - Do NOT use hardcoded delays or `setTimeout` — use async patterns.
 - Do NOT ignore TypeScript compiler warnings — treat as errors.

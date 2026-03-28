@@ -16,23 +16,25 @@ The loop maintains deterministic progress through `state.json`, committed to git
 
 ## Skills
 
-![43 Specialized Skills](assets/skills-at-a-glance.svg)
+![46 Specialized Skills](assets/skills-at-a-glance.svg)
 
 Skills are reusable procedures that do the actual work. Each skill has a SKILL.md file with instructions, optional references, and scripts. The orchestrator discovers and invokes them automatically.
 
-**43 skills in 7 categories:**
+**46 skills in the full framework. The groups below summarize the main workflow areas:**
 
 | Category | What they do | Count |
 |----------|-------------|-------|
 | Phase | Drive discovery (spec refinement, UI/UX, tech stack) | 3 |
 | Delivery | Execute increments (tests, contracts, implementation, deploy) | 6 |
 | Protocol | Ensure consistency (state, commits, audit, gates, resume, errors) | 6 |
-| Utility | Support tools (validator, runner, build check, diagnostics) | 8 |
+| Utility | Support tools (validator, runner, build check, domain modeling, diagnostics) | 9 |
 | Extraction | Scan existing codebases (scanner, deps, arch, API, data, tests) | 6 |
 | Assessment | Evaluate paths (modernize, rewrite, cloud-native, security, perf) | 5 |
 | Planning | Generate increments (modernize, rewrite, cloud-native, extend, security) | 5+4 |
 
 Skills follow the [agentskills.io](https://agentskills.io) standard. You can create your own or install community skills from [skills.sh](https://skills.sh).
+
+Some skills are reused across multiple flows (for example, greenfield delivery and brownfield tracks), so the grouped counts above do not sum directly to the repository total.
 
 → [Deep dive: Skills Catalog](skills.md)
 
@@ -66,7 +68,7 @@ Every increment follows the same 4-step cycle:
 
 1. **Tests** — Generate e2e specs, Gherkin scenarios, and unit test stubs. Establish a red baseline (tests fail, as expected).
 2. **Contracts** — Generate OpenAPI specs, shared TypeScript types, and infrastructure contracts. These enable parallel implementation.
-3. **Implementation** — Write code in parallel slices (API + Web), then wire together (Integration). Red tests turn green.
+3. **Implementation** — Generate or update the domain model, write code in parallel slices (API + Web), then wire together (Integration). Red tests turn green.
 4. **Deploy** — Provision Azure resources, deploy, run smoke tests, verify with full regression.
 
 After each increment: main is green, deployment is live, docs are current. Then the next increment begins.

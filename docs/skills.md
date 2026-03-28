@@ -1,6 +1,6 @@
 # Skills Catalog
 
-spec2cloud uses 43 specialized skills following the [agentskills.io](https://agentskills.io) standard. Each skill is a reusable procedure stored in `.github/skills/` with a SKILL.md file and optional references, scripts, and assets.
+spec2cloud uses 46 specialized skills following the [agentskills.io](https://agentskills.io) standard. Each skill is a reusable procedure stored in `.github/skills/` with a SKILL.md file and optional references, scripts, and assets.
 
 ![Skills Architecture](assets/skills-architecture.svg)
 
@@ -14,7 +14,7 @@ Each skill has:
 - Optional `scripts/` for automation
 - Optional `assets/` for templates and resources
 
-## Greenfield Skills (22)
+## Greenfield Skills (23)
 
 ### Phase Skills
 Drive the one-time discovery process.
@@ -57,6 +57,7 @@ Support tools used throughout.
 | spec-validator | Validate spec completeness and consistency |
 | test-runner | Execute test suites and report results |
 | build-check | Verify builds pass |
+| domain-modeling | Generate DDD domain models, bounded-context maps, and service-boundary assessments |
 | deploy-diagnostics | Diagnose deployment failures |
 | research-best-practices | Use MCP tools to research approaches |
 | skill-creator | Package new reusable patterns as skills |
